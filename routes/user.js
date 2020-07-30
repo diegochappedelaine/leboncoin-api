@@ -73,7 +73,7 @@ router.post("/user/log_in", async (req, res) => {
                     },
                 });
             } else {
-                res.status(400).json("Wrong password");
+                res.status(401).json("Wrong password");
             }
         }
     } catch (error) {

@@ -16,13 +16,13 @@ router.post("/user/sign_up", async (req, res) => {
     try {
         // Check si user pas déjà enregistré avec cet email
         if (!req.fields.email || !req.fields.password || !req.fields.username) {
-            res.status(400).json("Missing parameters.");
+            res.status(401).json("Missing parameters.");
         } else {
             const userAlreadyInDb = await User.findOne({
                 email: req.fields.email,
             });
             if (userAlreadyInDb) {
-                res.status(400).json("User already signed in.");
+                res.status(401).json("User already signed in.");
             } else {
                 // Gestion du mot de passe
                 const password = req.fields.password;

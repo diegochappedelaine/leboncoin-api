@@ -20,10 +20,12 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Import des fichiers routes
 const userRoutes = require("./routes/user");
 const offerRoutes = require("./routes/offer");
+const paymentRoutes = require("./routes/payment");
 
 // Initialisation des routes via Express
 app.use(userRoutes);
 app.use(offerRoutes);
+app.use(paymentRoutes);
 
 // Récuperer les routes que je n'ai pas déclaré
 app.get("*", async (req, res) => {

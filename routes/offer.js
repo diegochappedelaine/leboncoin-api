@@ -115,6 +115,8 @@ router.get("/offer/with-count", async (req, res) => {
       } else if (sort === "date-asc") {
         sorting.created = "asc";
       }
+    } else {
+      sorting.created = "asc";
     }
 
     const offersSorted = await Offer.find(filtering)

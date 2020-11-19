@@ -21,44 +21,34 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 router.post("/offer/publish", isAuthenticated, async (req, res) => {
   console.log("route : /offer/publish");
   try {
-    if (500 < req.fields.description.length) {
-      return res.status(400).json("Description must be 500 character max.");
-    } else if (50 < req.fields.title) {
-      return res.status(400).json("Title must be 50 character max.");
-    } else if (10000 < req.fields.price) {
-      return res.status(400).json("Price can't be higher then 10000€.");
-    } else {
-      // Gestion de la photo
-      try {
-        let pictureToUpload = req.files.picture.path;
-        const pictureUploaded = await cloudinary.uploader.upload(
-          pictureToUpload
-        );
-        picture = pictureUploaded;
-      } catch (error) {
-        return res.json({ error: error.message });
-      }
-      newOffer = new Offer({
-        creator: req.user,
-        description: req.fields.description,
-        picture: picture,
-        price: req.fields.price,
-        title: req.fields.title,
-      });
-      await newOffer.save();
-      res.status(201).json({
-        _id: newOffer._id,
-        title: newOffer.title,
-        description: newOffer.description,
-        price: newOffer.price,
-        created: newOffer.created,
-        creator: {
-          account: newOffer.creator.account,
-          _id: newOffer.creator._id,
-        },
-        picture: newOffer.picture,
-      });
+    // Gestion de la photo
+    try {
+      let pictureToUpload = req.files.picture.path;
+      const pictureUploaded = await cloudinary.uploader.upload(pictureToUpload);
+      picture = pictureUploaded;
+    } catch (error) {
+      return res.json({ error: error.message });
     }
+    newOffer = new Offer({
+      creator: req.user,
+      description: req.fields.description,
+      picture: picture,
+      price: req.fields.price,
+      title: req.fields.title,
+    });
+    await newOffer.save();
+    res.status(201).json({
+      _id: newOffer._id,
+      title: newOffer.title,
+      description: newOffer.description,
+      price: newOffer.price,
+      created: newOffer.created,
+      creator: {
+        account: newOffer.creator.account,
+        _id: newOffer.creator._id,
+      },
+      picture: newOffer.picture,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
